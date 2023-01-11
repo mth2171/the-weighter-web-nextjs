@@ -8,7 +8,7 @@ const Header = () => {
       <Link href="/">
         <Image src={title} className="flex h-[6vh] w-[12vw] ml-7 cursor-pointer" />
       </Link>
-      <div className="flex justify-center items-center mr-7">
+      <div className="flex justify-center items-center mr-7 text-black">
         <Link href="/info">
           <button className="flex w-36 h-[4vh] justify-center items-center border-b-2 border-menuitem mr-7 text-[15px] font-[550]">기능 소개</button>
         </Link>
