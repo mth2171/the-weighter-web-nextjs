@@ -1,19 +1,16 @@
 import Image from "next/image";
-import Footer from "../components/Footer";
-import Header from "../components/Header";
+import CommonLayout from "../components/layout/CommonLayout";
 import info1 from "../public/info1.png";
 import info2 from "../public/info2.png";
 import info3 from "../public/info3.png";
 
 const info = () => {
   return (
-    <div>
-      {/* Header */}
-      <Header />
+    <CommonLayout>
       <div className="flex w-full h-[88vh] justify-center items-center border-b-1 flex-col bg-gray-200 rounded-lg">
         <div className="flex justify-center items-center rounded-2xl shadow-shadow mr-[5%] m-4">
           <div className="flex w-[12vw] h-[12vw] rounded-l-lg">
-            <Image src={info1} className="w-full" />
+            <Image src={info1} className="w-full" alt="info1"/>
           </div>
           <div className="flex w-[60vw] h-[12vw] flex-col">
             <div className="flex w-full h-1/4 p-2.5 bg-gray-300 text-[20px] font-[550] rounded-tr-lg">
@@ -27,7 +24,7 @@ const info = () => {
         </div>
         <div className="flex justify-center items-center rounded-2xl shadow-shadow ml-[5%] m-4">
           <div className="flex w-[12vw] h-[12vw] rounded-l-lg">
-            <Image src={info2} className="w-full" />
+            <Image src={info2} className="w-full" alt="info2"/>
           </div>
           <div className="flex w-[60vw] h-[12vw] flex-col">
             <div className="flex w-full h-1/4 p-2.5 bg-gray-300 text-[20px] font-[550] rounded-tr-lg">
@@ -40,7 +37,7 @@ const info = () => {
         </div>
         <div className="flex justify-center items-center rounded-2xl shadow-shadow mr-[5%] m-4">
           <div className="flex w-[12vw] h-[12vw] rounded-l-lg">
-            <Image src={info3} className="w-full" />
+            <Image src={info3} className="w-full" alt="info3"/>
           </div>
           <div className="flex w-[60vw] h-[12vw] flex-col">
             <div className="flex w-full h-1/4 p-2.5 bg-gray-300 text-[20px] font-[550] rounded-tr-lg">
@@ -53,9 +50,7 @@ const info = () => {
           </div>
         </div>
       </div>
-      {/* Footer */}
-      <Footer />
-    </div>
+    </CommonLayout>
   );
 };
 

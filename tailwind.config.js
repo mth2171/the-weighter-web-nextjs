@@ -7,6 +7,7 @@ module.exports = {
         menuitem: "#23E0E2",
         button: "#01919e",
         hover: "#8EC1C6",
+        op: "rgba(0, 0, 0, 0.5)"
       },
       backgroundImage: {
         banner: "url(../public/banner.png)",
