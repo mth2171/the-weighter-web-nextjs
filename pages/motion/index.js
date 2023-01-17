@@ -1,17 +1,22 @@
-import CommonLayout from '../components/layout/CommonLayout';
+import CommonLayout from '../../components/layout/CommonLayout';
 import { useRef, useEffect, useState } from 'react';
 import * as posenet from '@tensorflow-models/posenet';
 import * as tf from '@tensorflow/tfjs';
 import '@tensorflow/tfjs-backend-webgl';
 import Webcam from 'react-webcam';
-import { drawKeypoints, drawSkeleton } from '../utils/draw'
-import Squat from '../utils/detect-pose/squat';
-import { Box, Button, Modal } from '@mui/material';
-import MotionResult from '../components/modal/motionResult';
+import { drawKeypoints, drawSkeleton } from '../../utils/draw'
+import Squat from '../../utils/detect-pose/squat';
+import MotionResult from '../../components/modal/motionResult';
+import request from '../../utils/request';
+import { useRouter } from 'next/router';
+import axios from 'axios';
 
 const _TIME = 5;
 
 const Motion = () => {
+  const router = useRouter();
+  const { type } = router.query;
+
   const [count, step, checkPoses] = Squat();
   const [time, setTime] = useState(_TIME);
   const [isStart, setIsStart] = useState(false);
@@ -61,7 +66,7 @@ const Motion = () => {
 
     setInterval(() => {
       detectWebcam(net);
-    }, 500)
+    }, 200)
   }
 
   const onClickStartButton = () => {
@@ -77,7 +82,10 @@ const Motion = () => {
   }
   
   const onClickSaveButton = () => {
-    
+    request
+      .post('api/motion/save', { type, count, time: _TIME, score: count })
+      .then((res) => console.log(res.data))
+      .catch((err) => console.error(err));
   }
   
   useEffect(() => {
@@ -98,12 +106,6 @@ const Motion = () => {
   }, [isFinished, open])
 
   useEffect(() => {
-    if (isStart){
-      runPosenet();
-    }
-  }, [isStart]);
-
-  useEffect(() => {
     if (isReady && ready !== 0) {
       const timer = setInterval(() => {
         setReady(ready - 1);
@@ -114,6 +116,13 @@ const Motion = () => {
       setIsReady(false);
     }
   }, [isReady, ready])
+
+  useEffect(() => {
+    if (isReady) {
+      runPosenet();
+    }
+    console.log(type);
+  }, [isReady])
   
   return (
     <CommonLayout>
@@ -140,7 +149,7 @@ const Motion = () => {
           </div>
           <button className="flex mt-[42%] mx-10 w-[150px] h-[10%] justify-center items-center text-white rounded-lg bg-button text-2xl shadow-shadow" onClick={() => onClickStartButton()}>START</button>  
         </div>
-        <MotionResult open={open} onClose={() => setOpen(true)} count={count} _TIME={_TIME} onClickResetButton={() => onClickResetButton()} onClickSaveButton={() => onClickSaveButton()} />
+        <MotionResult open={open} onClose={() => setOpen(true)} count={count} _TIME={_TIME} onClickResetButton={() => onClickResetButton()} onClickSaveButton={() => onClickSaveButton()} type={type}/>
       </div>
     </CommonLayout>
   );

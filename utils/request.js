@@ -15,3 +15,13 @@ export const infoRequest = axios.create({
     "Access-Control-Allow-Origin": "*",
   },
 });
+
+const request = axios.create({
+  baseURL: process.env.NEXT_PUBLIC_API_URL || "http://localhost:8000",
+  withCredentials: true,
+  header: {
+    "Access-Control-Allow-Origin": "*",
+  }
+});
+
+export default request;

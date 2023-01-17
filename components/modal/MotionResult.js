@@ -22,8 +22,8 @@ const MotionResult = ({open, onClose, count, pose, _TIME, onClickResetButton, on
                 </div>
               </div>
               <div className="flex w-full h-[15%] justify-center items-center">
-                <button className="flex w-[150px] h-[50px] justify-center items-center text-white rounded-lg bg-neutral-500 mt-5 text-xl mx-5 shadow-shadow" onClick={onClickResetButton}>다시하기</button>  
-                <button className="flex w-[150px] h-[50px] justify-center items-center text-white rounded-lg bg-button mt-5 text-xl mx-5 shadow-shadow" onClick={onClickSaveButton}>저장</button>  
+                <button className="flex w-[150px] h-[50px] justify-center items-center text-white rounded-lg bg-neutral-500 mt-5 text-xl mx-5 shadow-shadow" onClick={() => onClickResetButton()}>다시하기</button>  
+                <button className="flex w-[150px] h-[50px] justify-center items-center text-white rounded-lg bg-button mt-5 text-xl mx-5 shadow-shadow" onClick={() => onClickSaveButton()}>저장</button>  
               </div>
             </div>
           </Box>

@@ -7,14 +7,14 @@ const nextConfig = {
 
       return config;
    },
-//   async rewrites() {
-//     return [
-//        {
-//           source: "/:path*",
-//           destination: "http://localhost:3080/:path*",
-//        },
-//     ];
-//  },
+  async rewrites() {
+    return [
+       {
+          source: "/api/:path*",
+          destination: "http://localhost:8000/:path*",
+       },
+    ];
+ },
 };
 
 module.exports = nextConfig;

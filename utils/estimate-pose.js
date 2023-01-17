@@ -1,6 +1,5 @@
 export function getKeypointsObject(pose) {
   return pose.keypoints.reduce((acc, { part, position, score }) => {
-    console.log({ ...acc });
     position["score"] = score;
     acc[part] = position;
     return { ...acc };
