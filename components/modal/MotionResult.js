@@ -1,13 +1,13 @@
 import React from 'react';
 import { Modal, Box } from '@mui/material';
 
-const MotionResult = ({open, onClose, count, pose, _TIME, onClickResetButton, onClickSaveButton}) => {
+const MotionResult = ({open, onClose, count, pose, _TIME, onClickResetButton, onClickSaveButton, type}) => {
   return (
         <Modal open={open} onClose={onClose}>
           <Box className="absolute top-1/4 left-1/4 w-1/2 h-3/5 bg-white border-black border-2 rounded-xl shadow-shadow">
             <div className="flex w-full h-full justify-center items-center flex-col px-10">
               <label className="flex w-full h-[15%] text-3xl justify-center border-b-2 border-neutral-500 items-center font-extrabold">
-                <label className="flex w-1/2 h-3/4 bg-button text-white justify-center items-center rounded-xl">Squat 결과</label>
+            <label className="flex w-1/2 h-3/4 bg-button text-white justify-center items-center rounded-xl">{type} 결과</label>
               </label>
               <div className="flex w-full h-2/3 text-5xl border-b-2 border-neutral-300 justify-center items-center bg-neutral-300 mt-4 font-extrabold">
                 <div className="flex w-1/2 h-full flex-col justify-center items-end">

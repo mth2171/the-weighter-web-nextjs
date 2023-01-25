@@ -4,10 +4,11 @@ import { barcodeRequest, infoRequest } from "../utils/request";
 import Quagga from "quagga";
 import Image from "next/image";
 import CommonLayout from "../components/layout/CommonLayout";
+import axios from "axios";
 
 const Barcode = () => {
   const [src, setSrc] = useState("");
-  const [barcode, setBarcode] = useState("");
+  const [barcode, setBarcode] = useState(null);
   const [name, setName] = useState("");
   const [data, setData] = useState({});
   const [showData, setShowData] = useState({});
@@ -36,7 +37,7 @@ const Barcode = () => {
         if (result.codeResult) {
           setBarcode(result.codeResult.code);
         } else {
-          console.log("not detected");
+          alert("바코드가 인식되지 않았습니다. 다시 시도해주세요.");
         }
       }
     );
@@ -56,22 +57,48 @@ const Barcode = () => {
     }
   };
 
+  const onClickResetButton = () => {
+    setSrc("");
+    setBarcode("");
+    setName("");
+    setData([]);
+  };
+
+  const onClickSaveButton = () => {
+    if (showData["제품명"] && confirm("저장하시겠습니까?")) {
+      axios
+        .post("/barcode/save", { data })
+        .then((res) => {
+          console.log(res.data);
+          onClickResetButton();
+        })
+        .catch((err) => console.error(err));
+    }
+  };
+
   useEffect(() => {
-    infoRequest
-      .get("getFoodNtrItdntList1?serviceKey=" + process.env.NEXT_PUBLIC_PRODUCT_KEY + "&desc_kor=" + name + "&type=json")
-      .then((res) => setData(res.data[0]))
-      .catch((err) => console.error(err));
+    if (name) {
+      infoRequest
+        .get("getFoodNtrItdntList1?serviceKey=" + process.env.NEXT_PUBLIC_PRODUCT_KEY + "&desc_kor=" + name + "&type=json")
+        .then((res) => {
+          setData(res.data.body.items[0]);
+          console.log(res.data.body);
+        })
+        .catch((err) => console.error(err));
+    }
   }, [name]);
 
   useEffect(() => {
-    onChangeData(data, setShowData);
+    if (data) {
+      onChangeData(data, setShowData);
+    }
   }, [data]);
 
   const onChangeData = (data, setShowData) => {
-    if (!data) {
+    if (!data || data.DESC_KOR === "고량미,알곡") {
       setData([]);
     } else {
-      const newObj = {};
+      const newObj = [];
       newObj["제품명"] = data["DESC_KOR"];
       newObj["제조업체"] = data["ANIMAL_PLANT"];
       newObj["1회제공량 (g)"] = data["SERVING_WT"];
@@ -94,23 +121,35 @@ const Barcode = () => {
         <div className="flex w-4/5 h-[80%] bg-white rounded-2xl items-center justify-center shadow-shadow">
           <div className="flex w-[30%] h-full flex-col items-center justify-center">
             {src ? (
-              <Image src={src} className="w-full rounded-2xl" alt="src"/>
+              <Image src={src} width={200} height={200} className="w-full rounded-2xl" alt="src" />
             ) : (
               <label className="flex w-[23vw] h-[23vw] bg-gray-200 rounded-2xl shadow-shadow items-center justify-center flex-col cursor-pointer">
-                <Image src={camera} width={200} height={200} alt="camera"/>
+                <Image src={camera} width={200} height={200} alt="camera" />
                 클릭하여 이미지를 첨부합니다.
                 <input type="file" className="hidden" accept="image/*" onChange={(e) => decode(e)}></input>
               </label>
             )}
             <label>{barcode}</label>
             <div className="flex w-full flex-row justify-around">
+              {data ? (
+                <button
+                  className="flex w-36 h-12 items-center justify-center bg-button rounded-lg shadow-shadow mt-7 text-white text-[15px] hover:bg-hover hover:transition"
+                  onClick={onClickBarcodeButton}
+                >
+                  바코드 분석
+                </button>
+              ) : (
+                <button
+                  className="flex w-36 h-12 items-center justify-center bg-button rounded-lg shadow-shadow mt-7 text-white text-[15px] hover:bg-hover hover:transition"
+                  onClick={onClickResetButton}
+                >
+                  초기화
+                </button>
+              )}
               <button
                 className="flex w-36 h-12 items-center justify-center bg-button rounded-lg shadow-shadow mt-7 text-white text-[15px] hover:bg-hover hover:transition"
-                onClick={onClickBarcodeButton}
+                onClick={onClickSaveButton}
               >
-                바코드 분석
-              </button>
-              <button className="flex w-36 h-12 items-center justify-center bg-button rounded-lg shadow-shadow mt-7 text-white text-[15px] hover:bg-hover hover:transition">
                 영양정보 등록
               </button>
             </div>
@@ -118,13 +157,16 @@ const Barcode = () => {
           <div className="flex w-3/5 h-full flex-col items-center justify-center">
             <div className="flex w-[90%] h-4/5 bg-gray-200 rounded-lg p-5 flex-col overflow-auto">
               <div className="flex w-[20%] h-[10%] p-5 bg-gray-400 items-center justify-center text-[25px] rounded-lg text-[550] mb-5">분석 결과</div>
-              {showData &&
+              {showData ? (
                 Object.keys(showData).map((value, key) => (
                   <div key={showData.value} className="flex w-full h-2/5 justify-center items-center flex-row mb-5">
                     <div className="flex w-1/4 h-10 justify-center items-center bg-gray-400">{value}</div>
                     <div className="flex w-2/4 h-10 justify-center items-center bg-white">{showData[value] === "N/A" ? 0.0 : showData[value]}</div>
                   </div>
-                ))}
+                ))
+              ) : (
+                <div className="flex text-3xl font-bold">데이터가 없습니다.</div>
+              )}
             </div>
           </div>
         </div>

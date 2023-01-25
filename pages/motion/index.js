@@ -7,7 +7,6 @@ import Webcam from 'react-webcam';
 import { drawKeypoints, drawSkeleton } from '../../utils/draw'
 import Squat from '../../utils/detect-pose/squat';
 import MotionResult from '../../components/modal/motionResult';
-import request from '../../utils/request';
 import { useRouter } from 'next/router';
 import axios from 'axios';
 
@@ -82,10 +81,16 @@ const Motion = () => {
   }
   
   const onClickSaveButton = () => {
-    request
-      .post('api/motion/save', { type, count, time: _TIME, score: count })
-      .then((res) => console.log(res.data))
-      .catch((err) => console.error(err));
+    console.log(type, count, _TIME, count);
+    if (window.confirm(
+      `저장하시겠습니까? \n운동명 : ${type}, 시간 : ${_TIME}, 개수 : ${count}, 점수 : ${count}`
+    )) {
+      axios
+        .post('motion/save', { type: type, count: count, time: _TIME, score: count }, { withCredentials: true })
+        .then((res) => onClickResetButton())
+        .catch((err) => console.error(err));
+    }
+    
   }
   
   useEffect(() => {
@@ -121,7 +126,6 @@ const Motion = () => {
     if (isReady) {
       runPosenet();
     }
-    console.log(type);
   }, [isReady])
   
   return (
