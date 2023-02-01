@@ -21,7 +21,7 @@ const request = axios.create({
   withCredentials: true,
   header: {
     "Access-Control-Allow-Origin": "*",
-  }
+  },
 });
 
 export default request;
