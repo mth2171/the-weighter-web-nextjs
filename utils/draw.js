@@ -53,21 +53,14 @@ function setDatGuiPropertyCss(propertyText, liCssString, spanCssString = "") {
 }
 
 export function updateTryResNetButtonDatGuiCss() {
-  setDatGuiPropertyCss(
-    tryResNetButtonText,
-    tryResNetButtonBackgroundCss,
-    tryResNetButtonTextCss
-  );
+  setDatGuiPropertyCss(tryResNetButtonText, tryResNetButtonBackgroundCss, tryResNetButtonTextCss);
 }
 
 /**
  * Toggles between the loading UI and the main canvas UI.
+ * 로딩 UI와 기본 캔버스 UI 사이를 전환
  */
-export function toggleLoadingUI(
-  showLoadingUI,
-  loadingDivId = "loading",
-  mainDivId = "main"
-) {
+export function toggleLoadingUI(showLoadingUI, loadingDivId = "loading", mainDivId = "main") {
   if (showLoadingUI) {
     document.getElementById(loadingDivId).style.display = "block";
     document.getElementById(mainDivId).style.display = "none";
@@ -90,6 +83,7 @@ export function drawPoint(ctx, y, x, r, color) {
 
 /**
  * Draws a line on a canvas, i.e. a joint
+ * 캔버스에 관절 그리기
  */
 export function drawSegment([ay, ax], [by, bx], color, scale, ctx) {
   ctx.beginPath();
@@ -97,31 +91,25 @@ export function drawSegment([ay, ax], [by, bx], color, scale, ctx) {
   ctx.lineTo(bx * scale, by * scale);
   ctx.lineWidth = lineWidth;
   ctx.strokeStyle = color;
+  ctx.fill();
   ctx.stroke();
 }
 
 /**
  * Draws a pose skeleton by looking up all adjacent keypoints/joints
+ * 인접한 모든 키포인트 / 조인트를 찾아 포즈 스켈레톤 그리기
  */
 export function drawSkeleton(keypoints, minConfidence, ctx, scale = 1) {
-  const adjacentKeyPoints = posenet.getAdjacentKeyPoints(
-    keypoints,
-    minConfidence
-  );
+  const adjacentKeyPoints = posenet.getAdjacentKeyPoints(keypoints, minConfidence);
 
   adjacentKeyPoints.forEach((keypoints) => {
-    drawSegment(
-      toTuple(keypoints[0].position),
-      toTuple(keypoints[1].position),
-      color,
-      scale,
-      ctx
-    );
+    drawSegment(toTuple(keypoints[0].position), toTuple(keypoints[1].position), color, scale, ctx);
   });
 }
 
 /**
  * Draw pose keypoints onto a canvas
+ * 캔버스에 포즈 키포인트 그리기
  */
 export function drawKeypoints(keypoints, minConfidence, ctx, scale = 1) {
   for (let i = 0; i < keypoints.length; i++) {
@@ -140,16 +128,13 @@ export function drawKeypoints(keypoints, minConfidence, ctx, scale = 1) {
  * Draw the bounding box of a pose. For example, for a whole person standing
  * in an image, the bounding box will begin at the nose and extend to one of
  * ankles
+ * 포즈의 테두리 상자 그리기
+ * 예를 들어 한 이미지에 서 있는 사람의 경우 경계 상자는 코에서 시작하여 발목 중 하나로 확장
  */
 export function drawBoundingBox(keypoints, ctx) {
   const boundingBox = posenet.getBoundingBox(keypoints);
 
-  ctx.rect(
-    boundingBox.minX,
-    boundingBox.minY,
-    boundingBox.maxX - boundingBox.minX,
-    boundingBox.maxY - boundingBox.minY
-  );
+  ctx.rect(boundingBox.minX, boundingBox.minY, boundingBox.maxX - boundingBox.minX, boundingBox.maxY - boundingBox.minY);
 
   ctx.strokeStyle = boundingBoxColor;
   ctx.stroke();
@@ -157,6 +142,7 @@ export function drawBoundingBox(keypoints, ctx) {
 
 /**
  * Converts an arary of pixel data into an ImageData object
+ * 픽셀 데이터의 배열을 imagedata 객체로 변환
  */
 export async function renderToCanvas(a, ctx) {
   const [height, width] = a.shape;
@@ -179,6 +165,7 @@ export async function renderToCanvas(a, ctx) {
 
 /**
  * Draw an image on a canvas
+ * 캔버스에 이미지 그리기
  */
 export function renderImageToCanvas(image, size, canvas) {
   canvas.width = size[0];
@@ -190,6 +177,7 @@ export function renderImageToCanvas(image, size, canvas) {
 
 /**
  * Draw heatmap values, one of the model outputs, on to the canvas
+ * 모델 출력 중 하나인 히트맵 값을 캔버스에 그림
  * Read our blog post for a description of PoseNet's heatmap outputs
  * https://medium.com/tensorflow/real-time-human-pose-estimation-in-the-browser-with-tensorflow-js-7dd0bc881cd5
  */
@@ -204,6 +192,7 @@ export function drawHeatMapValues(heatMapValues, outputStride, canvas) {
 /**
  * Used by the drawHeatMapValues method to draw heatmap points on to
  * the canvas
+ * drawHeatMapValues 메소드에서 캔버스에 히트맵 포인트를 그리는데 사용
  */
 function drawPoints(ctx, points, radius, color) {
   const data = points.buffer().values;

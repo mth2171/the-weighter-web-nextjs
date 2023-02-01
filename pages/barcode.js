@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
-import camera from "../public/camera.png";
 import { barcodeRequest, infoRequest } from "../utils/request";
 import Quagga from "quagga";
-import Image from "next/image";
 import CommonLayout from "../components/layout/CommonLayout";
 import axios from "axios";
+import LeftSide from "../components/barcode/left-side";
 
 const Barcode = () => {
   const [src, setSrc] = useState("");
@@ -117,57 +116,21 @@ const Barcode = () => {
 
   return (
     <CommonLayout>
-      <div className="flex w-full h-[88vh] justify-center items-center border-b-1 flex-col bg-gray-200">
-        <div className="flex w-4/5 h-[80%] bg-white rounded-2xl items-center justify-center shadow-shadow">
-          <div className="flex w-[30%] h-full flex-col items-center justify-center">
-            {src ? (
-              <Image src={src} width={200} height={200} className="w-full rounded-2xl" alt="src" />
+      <div className="flex w-4/5 h-[80%] bg-white rounded-2xl items-center justify-center shadow-shadow">
+        <LeftSide src={src} decode={decode} barcode={barcode} onClickBarcodeButton={onClickBarcodeButton} onClickSaveButton={onClickSaveButton} />
+        <div className="flex w-3/5 h-full flex-col items-center justify-center">
+          <div className="flex w-[90%] h-4/5 bg-gray-200 rounded-lg p-5 flex-col overflow-auto">
+            <div className="flex w-[20%] h-[10%] p-5 bg-gray-400 items-center justify-center text-[25px] rounded-lg text-[550] mb-5">분석 결과</div>
+            {showData ? (
+              Object.keys(showData).map((value, key) => (
+                <div key={showData.value} className="flex w-full h-2/5 justify-center items-center flex-row mb-5">
+                  <div className="flex w-1/4 h-10 justify-center items-center bg-gray-400">{value}</div>
+                  <div className="flex w-2/4 h-10 justify-center items-center bg-white">{showData[value] === "N/A" ? 0.0 : showData[value]}</div>
+                </div>
+              ))
             ) : (
-              <label className="flex w-[23vw] h-[23vw] bg-gray-200 rounded-2xl shadow-shadow items-center justify-center flex-col cursor-pointer">
-                <Image src={camera} width={200} height={200} alt="camera" />
-                클릭하여 이미지를 첨부합니다.
-                <input type="file" className="hidden" accept="image/*" onChange={(e) => decode(e)}></input>
-              </label>
+              <div className="flex text-3xl font-bold">데이터가 없습니다.</div>
             )}
-            <label>{barcode}</label>
-            <div className="flex w-full flex-row justify-around">
-              {data ? (
-                <button
-                  className="flex w-36 h-12 items-center justify-center bg-button rounded-lg shadow-shadow mt-7 text-white text-[15px] hover:bg-hover hover:transition"
-                  onClick={onClickBarcodeButton}
-                >
-                  바코드 분석
-                </button>
-              ) : (
-                <button
-                  className="flex w-36 h-12 items-center justify-center bg-button rounded-lg shadow-shadow mt-7 text-white text-[15px] hover:bg-hover hover:transition"
-                  onClick={onClickResetButton}
-                >
-                  초기화
-                </button>
-              )}
-              <button
-                className="flex w-36 h-12 items-center justify-center bg-button rounded-lg shadow-shadow mt-7 text-white text-[15px] hover:bg-hover hover:transition"
-                onClick={onClickSaveButton}
-              >
-                영양정보 등록
-              </button>
-            </div>
-          </div>
-          <div className="flex w-3/5 h-full flex-col items-center justify-center">
-            <div className="flex w-[90%] h-4/5 bg-gray-200 rounded-lg p-5 flex-col overflow-auto">
-              <div className="flex w-[20%] h-[10%] p-5 bg-gray-400 items-center justify-center text-[25px] rounded-lg text-[550] mb-5">분석 결과</div>
-              {showData ? (
-                Object.keys(showData).map((value, key) => (
-                  <div key={showData.value} className="flex w-full h-2/5 justify-center items-center flex-row mb-5">
-                    <div className="flex w-1/4 h-10 justify-center items-center bg-gray-400">{value}</div>
-                    <div className="flex w-2/4 h-10 justify-center items-center bg-white">{showData[value] === "N/A" ? 0.0 : showData[value]}</div>
-                  </div>
-                ))
-              ) : (
-                <div className="flex text-3xl font-bold">데이터가 없습니다.</div>
-              )}
-            </div>
           </div>
         </div>
       </div>
