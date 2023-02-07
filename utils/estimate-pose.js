@@ -6,7 +6,7 @@ export function getKeypointsObject(pose) {
     position["score"] = score;
     acc[part] = position;
     return { ...acc };
-  }, {});
+  });
 }
 
 export function getAngle(x1, y1, x2, y2) {

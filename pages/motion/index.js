@@ -6,7 +6,7 @@ import axios from "axios";
 import CountScreen from "../../components/motion/count-screen";
 import InsideBox from "../../components/motion/inside-box";
 
-const _TIME = 5;
+const _TIME = 300;
 
 const Motion = () => {
   const router = useRouter();
@@ -54,6 +54,24 @@ const Motion = () => {
     }
   }, [isReady, ready]);
 
+  useEffect(() => {
+    if (isStart && time !== 0) {
+      const timer = setInterval(() => {
+        setTime(time - 1);
+        clearInterval(timer);
+      }, 1000);
+    } else if (time === 0) {
+      setIsFinished(true);
+      setIsStart(false);
+    }
+  }, [isStart, time]);
+
+  useEffect(() => {
+    if (isFinished) {
+      setOpen(true);
+    }
+  }, [isFinished]);
+
   return (
     <CommonLayout>
       {isReady && <CountScreen ready={ready} />}
@@ -61,7 +79,7 @@ const Motion = () => {
       <MotionResult
         open={open}
         onClose={() => setOpen(true)}
-        // nowCount={nowCount}
+        nowCount={nowCount}
         _TIME={_TIME}
         onClickResetButton={() => onClickResetButton()}
         onClickSaveButton={() => onClickSaveButton()}

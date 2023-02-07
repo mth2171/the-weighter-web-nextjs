@@ -16,7 +16,7 @@ const Barcode = () => {
 
   const onClickSaveButton = () => {
     if (showData["제품명"] && confirm("저장하시겠습니까?")) {
-      saveBarcodeData(data).then(() => onClickResetButton);
+      saveBarcodeData(data).then(() => onClickResetButton(setSrc, setBarcode, setName, setData));
     }
   };
 

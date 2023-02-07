@@ -29,8 +29,8 @@ const ExerciseScreen = ({ type, setNowCount, isReady, time }) => {
     canvas.current.width = videoWidth;
     canvas.current.height = videoHeight;
 
-    drawKeypoints(pose["keypoints"], 0.5, ctx);
-    drawSkeleton(pose["keypoints"], 0.5, ctx);
+    drawKeypoints(pose["keypoints"], 0.6, ctx);
+    drawSkeleton(pose["keypoints"], 0.7, ctx);
   };
 
   const detectWebcam = async (posenet) => {

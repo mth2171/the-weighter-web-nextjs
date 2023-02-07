@@ -8,26 +8,24 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
-const _EXERCISES = ['SQUAT', 'PUSHUP', 'SITUP']
+const _EXERCISES = ["SQUAT", "PUSHUP", "SITUP"];
 
 const Header = () => {
   return (
     <div className="flex w-full h-[7vh] justify-between items-center border-b-2 border-gray-300 bg-white">
       <Link href="/">
-        <Image src={title} className="flex h-[6vh] w-[12vw] ml-7 cursor-pointer" alt="logo"/>
+        <Image src={title} className="flex h-[6vh] w-[12vw] ml-7 cursor-pointer" alt="logo" />
       </Link>
       <div className="flex justify-center items-center mr-7 text-black">
         <Link href="/info">
-          <button className="flex w-36 h-[4vh] justify-center items-center border-b-2 border-menuitem mr-7 text-base font-semibold">기능 소개</button>
+          <button className="flex w-36 h-[4vh] justify-center items-center border-b-2 border-menuitem mr-7 text-base font-semibold">서비스 소개</button>
         </Link>
         <Link href="/barcode">
-          <button className="flex w-36 h-[4vh] justify-center items-center border-b-2 border-menuitem mr-7 text-base font-semibold">BARCODE</button>
+          <button className="flex w-36 h-[4vh] justify-center items-center border-b-2 border-menuitem mr-7 text-base font-semibold">영양소 추가</button>
         </Link>
         <Menu as="div" className="relative inline-block border-menuitem border-b-2 mr-7">
           <div>
-            <Menu.Button className="flex w-36 h-[4vh] justify-center items-center text-base font-semibold">
-              모션인식
-            </Menu.Button>
+            <Menu.Button className="flex w-36 h-[4vh] justify-center items-center text-base font-semibold">기록 측정</Menu.Button>
           </div>
           <Transition
             as={Fragment}
@@ -42,26 +40,41 @@ const Header = () => {
               <div className="py-1">
                 <Menu.Item className="flex justify-center items-center w-36 h-[4vh] bg-white hover:bg-gray-300">
                   {({ active }) => (
-                    <Link href={{
-                      pathname: "/motion",
-                      query: { type: 'squat' }
-                    }} className={classNames(active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block px-4 py-2')}>{_EXERCISES[0]}</Link>
+                    <Link
+                      href={{
+                        pathname: "/motion",
+                        query: { type: "squat" },
+                      }}
+                      className={classNames(active ? "bg-gray-100 text-gray-900" : "text-gray-700", "block px-4 py-2")}
+                    >
+                      {_EXERCISES[0]}
+                    </Link>
                   )}
                 </Menu.Item>
                 <Menu.Item className="flex justify-center items-center w-36 h-[4vh] bg-white hover:bg-gray-300">
                   {({ active }) => (
-                    <Link href={{
-                      pathname: "/motion",
-                      query: { type: 'pushup' }
-                    }} className={classNames(active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block px-4 py-2')}>{_EXERCISES[1]}</Link>
+                    <Link
+                      href={{
+                        pathname: "/motion",
+                        query: { type: "pushup" },
+                      }}
+                      className={classNames(active ? "bg-gray-100 text-gray-900" : "text-gray-700", "block px-4 py-2")}
+                    >
+                      {_EXERCISES[1]}
+                    </Link>
                   )}
                 </Menu.Item>
                 <Menu.Item className="flex justify-center items-center w-36 h-[4vh] bg-white hover:bg-gray-300">
                   {({ active }) => (
-                    <Link href={{
-                      pathname: "/motion",
-                      query: { type: 'situp' }
-                    }} className={classNames(active ? 'bg-gray-100 text-gray-900' : 'text-gray-700', 'block px-4 py-2')}>{_EXERCISES[2]}</Link>
+                    <Link
+                      href={{
+                        pathname: "/motion",
+                        query: { type: "situp" },
+                      }}
+                      className={classNames(active ? "bg-gray-100 text-gray-900" : "text-gray-700", "block px-4 py-2")}
+                    >
+                      {_EXERCISES[2]}
+                    </Link>
                   )}
                 </Menu.Item>
               </div>
@@ -74,7 +87,7 @@ const Header = () => {
         <Link href="/login">
           <button className="flex w-40 h-[4vh] justify-center items-center border-2 border-black mr-5 text-menu text-base font-semibold">로그인</button>
         </Link>
-        <Link href="/signup">
+        <Link href="/auth/signup">
           <button className="flex w-40 h-[4vh] justify-center items-center border-2 border-black text-menu text-base font-semibold">회원가입</button>
         </Link>
       </div>
