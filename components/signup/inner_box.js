@@ -1,6 +1,5 @@
 import Image from "next/image";
 import leftImage from "../../public/leftImage.png";
-import lock from "../../public/lock.png";
 import { useState, useEffect } from "react";
 import axios from "axios";
 

@@ -84,7 +84,7 @@ const Header = () => {
         <Link href="/qna">
           <button className="flex w-36 h-[4vh] justify-center items-center border-b-2 border-menuitem mr-7 text-base font-semibold">고객 지원</button>
         </Link>
-        <Link href="/login">
+        <Link href="/auth/login">
           <button className="flex w-40 h-[4vh] justify-center items-center border-2 border-black mr-5 text-menu text-base font-semibold">로그인</button>
         </Link>
         <Link href="/auth/signup">
