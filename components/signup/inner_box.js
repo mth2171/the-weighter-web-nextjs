@@ -2,16 +2,21 @@ import Image from "next/image";
 import leftImage from "../../public/leftImage.png";
 import { useState, useEffect } from "react";
 import axios from "axios";
+import EmailAuth from "../modal/EmailAuth";
 
 const InnerBox = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
   const [isConfirmEmail, setIsConfirmEmail] = useState(false);
+  const [isSendEmail, setIsSendEmail] = useState(false);
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   const [passwordConfirm, setPasswordConfirm] = useState("");
   const [isConfirmPassword, setIsConfirmPassword] = useState(false);
+  const [code, setCode] = useState("");
+
+  const [open, setOpen] = useState(false);
 
   const onClickEmailCheckButton = () => {
     const reg = /^[a-zA-Z0-9+-_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/;
@@ -43,6 +48,18 @@ const InnerBox = () => {
     }
   };
 
+  const onClickSendEmailButton = () => {
+    axios
+      .post("/signup/evf", { email })
+      .then((res) => {
+        setCode(res.data.sendEvfcode);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+    setOpen(true);
+  };
+
   useEffect(() => {
     const reg = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/;
     if (password.match(reg) && password === passwordConfirm) {
@@ -61,7 +78,7 @@ const InnerBox = () => {
       <Image src={leftImage} alt="leftImage" />
       <div className="flex w-[45%] h-[90%] bg-neutral-200 rounded-r-xl justify-center items-center flex-col">
         <label className="flex text-4xl font-bold">회원가입</label>
-        <div className="flex w-4/5 justify-between items-center flex-row mt-10">
+        <div className="flex w-4/5 justify-between items-center flex-row mt-5">
           <input className="flex w-[48%] h-12 border-gray-400 border-[1px] rounded-lg px-3" placeholder="성" onChange={(e) => setFirstName(e.target.value)} />
           <input className="flex w-[48%] h-12 border-gray-400 border-[1px] rounded-lg px-3" placeholder="이름" onChange={(e) => setLastName(e.target.value)} />
         </div>
@@ -76,13 +93,22 @@ const InnerBox = () => {
             확인
           </button>
         </div>
-        {isConfirmEmail ? (
-          <label className="flex w-4/5 justify-end text-blue-500 text-sm mt-1">이메일이 확인되었습니다.</label>
+        {isConfirmEmail && isSendEmail ? (
+          <div className="flex w-4/5 justify-end items-center mt-2">
+            <label className="flex text-blue-500 text-sm mr-2">이메일이 확인되었습니다.</label>{" "}
+          </div>
+        ) : isConfirmEmail ? (
+          <div className="flex w-4/5 justify-end items-center mt-2">
+            <label className="flex text-blue-500 text-sm mr-2">사용 가능한 이메일입니다.</label>
+            <button className="flex w-1/3 h-12 bg-button rounded-lg justify-center items-center text-white" onClick={() => onClickSendEmailButton()}>
+              인증메일 전송
+            </button>
+          </div>
         ) : (
           <label className="flex w-4/5 justify-end text-red-500 text-sm mt-1">이메일을 확인 해주세요.</label>
         )}
         <input
-          className="flex w-4/5 h-12 border-gray-400 border-[1px] rounded-lg mt-1 px-3"
+          className="flex w-4/5 h-12 border-gray-400 border-[1px] rounded-lg mt-2 px-3"
           placeholder="휴대폰 번호"
           onChange={(e) => setPhone(e.target.value)}
         />
@@ -115,6 +141,7 @@ const InnerBox = () => {
           계정 생성
         </button>
       </div>
+      <EmailAuth open={open} onClose={() => setOpen(!open)} email={email} setIsSendEmail={setIsSendEmail} code={code} />
     </div>
   );
 };
