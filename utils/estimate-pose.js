@@ -2,7 +2,7 @@ import Squat from "./detect-pose/squat";
 import Situp from "./detect-pose/situp";
 
 export function getKeypointsObject(pose) {
-  return pose.keypoints.reduce((acc, { part, position, score }) => {
+  return pose[0].keypoints.reduce((acc, { part, position, score }) => {
     position["score"] = score;
     acc[part] = position;
     return { ...acc };

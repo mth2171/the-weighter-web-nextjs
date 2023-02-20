@@ -1,18 +1,18 @@
 import { useRef, useCallback, useEffect } from "react";
-import * as posenet from "@tensorflow-models/posenet";
+import * as poseDetection from "@tensorflow-models/pose-detection";
 import Webcam from "react-webcam";
-import { drawKeypoints, drawSkeleton } from "../../utils/draw";
+import { drawKeypoints, drawSkeleton } from "../../utils/draw.backup";
 import EstimatePose from "../../utils/estimate-pose";
 import AbsoluteArea from "./absolute-area";
 
 const ExerciseScreen = ({ type, setNowCount, isReady, time }) => {
-  const [count, step, checkPoses] = EstimatePose(type);
+  // const [count, step, checkPoses] = EstimatePose(type);
 
-  useEffect(() => {
-    setNowCount(count);
-  }, [count, setNowCount]);
+  // useEffect(() => {
+  //   setNowCount(count);
+  // }, [count, setNowCount]);
 
-  const checkPose = useCallback((pose) => checkPoses(pose), [checkPoses]);
+  // const checkPose = useCallback((pose) => checkPoses(pose), [checkPoses]);
 
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
@@ -29,11 +29,11 @@ const ExerciseScreen = ({ type, setNowCount, isReady, time }) => {
     canvas.current.width = videoWidth;
     canvas.current.height = videoHeight;
 
-    drawKeypoints(pose["keypoints"], 0.6, ctx);
-    drawSkeleton(pose["keypoints"], 0.7, ctx);
+    drawKeypoints(pose[0]["keypoints"], 0.6, ctx);
+    // drawSkeleton(pose[0]["keypoints"], 0.7, ctx);
   };
 
-  const detectWebcam = async (posenet) => {
+  const detectWebcam = async (detector) => {
     if (typeof webcamRef.current !== "undefined" && webcamRef.current !== null && webcamRef.current.video.readyState === 4) {
       const video = webcamRef.current.video;
       const videoWidth = webcamRef.current.video.videoWidth;
@@ -42,34 +42,31 @@ const ExerciseScreen = ({ type, setNowCount, isReady, time }) => {
       webcamRef.current.video.width = videoWidth;
       webcamRef.current.video.height = videoHeight;
 
-      const pose = await posenet.estimateSinglePose(video);
+      const poses = await detector.estimatePoses(video);
 
-      checkPose(pose);
+      // checkPose(poses);
 
-      drawResult(pose, video, videoWidth, videoHeight, canvasRef);
+      drawResult(poses, video, videoWidth, videoHeight, canvasRef);
     }
   };
 
-  const runPosenet = async () => {
-    const posenetModel = await posenet.load({
-      inputResolution: { width: videoWidth, height: videoHeight },
-      scale: 0.8,
-    });
+  const runMovenet = async () => {
+    const detector = await poseDetection.createDetector(poseDetection.SupportedModels.MoveNet);
 
     setInterval(() => {
-      detectWebcam(posenetModel);
-    }, 200);
+      detectWebcam(detector);
+    }, 100);
   };
 
   useEffect(() => {
     if (isReady) {
-      runPosenet();
+      runMovenet();
     }
   }, [isReady]);
 
   return (
     <div>
-      <AbsoluteArea step={step} time={time} />
+      <AbsoluteArea /* step={step} */ time={time} />
       <Webcam ref={webcamRef} className="absolute w-[640px] h-[480px] top-[23%] left-[33%]" />
       <canvas ref={canvasRef} className="absolute w-[640px] h-[480px] top-[23%] left-[33%] scale-[(-1, 1)] translate-[(-200, 0)]" />
     </div>
