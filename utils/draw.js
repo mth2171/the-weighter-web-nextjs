@@ -1,9 +1,12 @@
+import * as posenet from "@tensorflow-models/posenet";
+
 const color = "white";
+const lineWidth = 1;
 
 export function drawKeypoints(keypoints, minConfidence, ctx, scale = 1) {
+  console.log(keypoints);
   for (let i = 0; i < keypoints.length; i++) {
     const keypoint = keypoints[i];
-    console.log(keypoint);
     if (keypoint.score < minConfidence) {
       continue;
     }
@@ -31,4 +34,26 @@ export function drawPoints(ctx, points, radius, color) {
       drawPoint(ctx, pointY, pointX, radius, color);
     }
   }
+}
+
+export function drawSkeleton(keypoints, minConfidence, ctx, scale = 1) {
+  const adjacentKeyPoints = posenet.getAdjacentKeyPoints(keypoints, minConfidence);
+
+  adjacentKeyPoints.forEach((keypoints) => {
+    drawSegment(toTuple(keypoints[0]), toTuple(keypoints[1]), color, scale, ctx);
+  });
+}
+
+function toTuple({ y, x }) {
+  return [y, x];
+}
+
+export function drawSegment([ay, ax], [by, bx], color, scale, ctx) {
+  ctx.beginPath();
+  ctx.moveTo(ax * scale, ay * scale);
+  ctx.lineTo(bx * scale, by * scale);
+  ctx.lineWidth = lineWidth;
+  ctx.strokeStyle = color;
+  ctx.fill();
+  ctx.stroke();
 }

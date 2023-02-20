@@ -1,7 +1,7 @@
 import { useRef, useCallback, useEffect } from "react";
 import * as poseDetection from "@tensorflow-models/pose-detection";
 import Webcam from "react-webcam";
-import { drawKeypoints, drawSkeleton } from "../../utils/draw.backup";
+import { drawKeypoints, drawSkeleton } from "../../utils/draw";
 import EstimatePose from "../../utils/estimate-pose";
 import AbsoluteArea from "./absolute-area";
 
@@ -29,8 +29,8 @@ const ExerciseScreen = ({ type, setNowCount, isReady, time }) => {
     canvas.current.width = videoWidth;
     canvas.current.height = videoHeight;
 
-    drawKeypoints(pose[0]["keypoints"], 0.6, ctx);
-    // drawSkeleton(pose[0]["keypoints"], 0.7, ctx);
+    drawKeypoints(pose[0].keypoints, 0.5, ctx);
+    drawSkeleton(pose[0].keypoints, 0.5, ctx);
   };
 
   const detectWebcam = async (detector) => {
@@ -55,7 +55,7 @@ const ExerciseScreen = ({ type, setNowCount, isReady, time }) => {
 
     setInterval(() => {
       detectWebcam(detector);
-    }, 100);
+    }, 20);
   };
 
   useEffect(() => {
@@ -63,6 +63,10 @@ const ExerciseScreen = ({ type, setNowCount, isReady, time }) => {
       runMovenet();
     }
   }, [isReady]);
+
+  useEffect(() => {
+    runMovenet();
+  });
 
   return (
     <div>
