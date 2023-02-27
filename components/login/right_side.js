@@ -9,7 +9,7 @@ const RightSide = () => {
   const onClickSubmitButton = () => {
     if (email && password) {
       axios
-        .post("/login/post", { id: email, pw: password })
+        .post("http://localhost:8000/login/post", { id: email, pw: password }, { withCredentials: true })
         .then((res) => console.log(res))
         .catch((err) => console.error(err));
     } else {

@@ -4,7 +4,6 @@ const color = "white";
 const lineWidth = 1;
 
 export function drawKeypoints(keypoints, minConfidence, ctx, scale = 1) {
-  console.log(keypoints);
   for (let i = 0; i < keypoints.length; i++) {
     const keypoint = keypoints[i];
     if (keypoint.score < minConfidence) {

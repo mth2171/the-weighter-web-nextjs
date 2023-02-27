@@ -1,18 +1,17 @@
 import { useRef, useCallback, useEffect } from "react";
 import * as poseDetection from "@tensorflow-models/pose-detection";
+import * as posenet from "@tensorflow-models/posenet";
 import Webcam from "react-webcam";
 import { drawKeypoints, drawSkeleton } from "../../utils/draw";
 import EstimatePose from "../../utils/estimate-pose";
 import AbsoluteArea from "./absolute-area";
 
 const ExerciseScreen = ({ type, setNowCount, isReady, time }) => {
-  // const [count, step, checkPoses] = EstimatePose(type);
+  const { count, step, checkPoses } = EstimatePose(type);
 
-  // useEffect(() => {
-  //   setNowCount(count);
-  // }, [count, setNowCount]);
-
-  // const checkPose = useCallback((pose) => checkPoses(pose), [checkPoses]);
+  useEffect(() => {
+    setNowCount(count);
+  }, [count, setNowCount]);
 
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
@@ -43,8 +42,9 @@ const ExerciseScreen = ({ type, setNowCount, isReady, time }) => {
       webcamRef.current.video.height = videoHeight;
 
       const poses = await detector.estimatePoses(video);
+      // const poses = await detector.estimateSinglePose(video);
 
-      // checkPose(poses);
+      checkPoses(poses);
 
       drawResult(poses, video, videoWidth, videoHeight, canvasRef);
     }
@@ -53,16 +53,15 @@ const ExerciseScreen = ({ type, setNowCount, isReady, time }) => {
   const runMovenet = async () => {
     const detector = await poseDetection.createDetector(poseDetection.SupportedModels.MoveNet);
 
+    const posenetModel = await posenet.load({
+      width: 640,
+      height: 480,
+    });
+
     setInterval(() => {
       detectWebcam(detector);
-    }, 20);
+    }, 10);
   };
-
-  useEffect(() => {
-    if (isReady) {
-      runMovenet();
-    }
-  }, [isReady]);
 
   useEffect(() => {
     runMovenet();
@@ -70,7 +69,7 @@ const ExerciseScreen = ({ type, setNowCount, isReady, time }) => {
 
   return (
     <div>
-      <AbsoluteArea /* step={step} */ time={time} />
+      <AbsoluteArea step={step} time={time} />
       <Webcam ref={webcamRef} className="absolute w-[640px] h-[480px] top-[23%] left-[33%]" />
       <canvas ref={canvasRef} className="absolute w-[640px] h-[480px] top-[23%] left-[33%] scale-[(-1, 1)] translate-[(-200, 0)]" />
     </div>
