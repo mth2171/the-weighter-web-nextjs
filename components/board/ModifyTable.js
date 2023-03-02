@@ -1,10 +1,11 @@
-import axios from "axios";
+import { useEffect, useState } from "react";
 import Link from "next/link";
+import axios from "axios";
 import { useRouter } from "next/router";
-import { useState } from "react";
 
-const CreateTable = () => {
+const ModifyTable = () => {
   const router = useRouter();
+  const { id } = router.query;
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("default");
   const [content, setContent] = useState("");
@@ -12,12 +13,10 @@ const CreateTable = () => {
   const onClickSubmitButton = () => {
     if (title && category && content) {
       axios
-        .post("http://localhost:8000/board/create", { title, category, content }, { withCredentials: true })
+        .post("http://localhost:8000/board/update", { title, category, content, id }, { withCredentials: true })
         .then((res) => {
           if (res.data === "SUCCESS") {
-            router.push("/board");
-          } else {
-            alert("실패했습니다.");
+            router.back();
           }
         })
         .catch((err) => console.error(err));
@@ -25,6 +24,19 @@ const CreateTable = () => {
       alert("제목, 내용을 모두 입력해주세요.");
     }
   };
+
+  useEffect(() => {
+    console.log(id);
+    axios
+      .get("show", { withCredentials: true, params: { id } })
+      .then((res) => {
+        console.log(res.data.result);
+        setCategory(res.data.result.category);
+        setTitle(res.data.result.title);
+        setContent(res.data.result.content);
+      })
+      .catch((err) => console.error(err));
+  }, []);
 
   return (
     <div className="flex w-3/5 h-4/5 border-neutral-400 border-2 justify-center bg-white items-center flex-col">
@@ -49,7 +61,7 @@ const CreateTable = () => {
       </div>
       <div className="flex w-full h-[10%] justify-start border-neutral-400 border-b items-center bg-neutral-300">
         <button className="flex w-24 h-12 justify-center items-center bg-button text-white rounded-lg ml-3" onClick={() => onClickSubmitButton()}>
-          작성
+          수정
         </button>
         <Link href="/board">
           <button className="flex w-24 h-12 justify-center items-center bg-neutral-500 text-white rounded-lg ml-10">취소</button>
@@ -59,4 +71,4 @@ const CreateTable = () => {
   );
 };
 
-export default CreateTable;
+export default ModifyTable;

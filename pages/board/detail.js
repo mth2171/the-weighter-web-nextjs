@@ -16,7 +16,8 @@ const Detail = () => {
       axios
         .get("/board/show", { withCredentials: true, params: { id } })
         .then((res) => {
-          setData(res.data.data);
+          console.log(res.data);
+          setData(res.data.result);
           setComment(res.data.comment);
         })
         .catch((err) => console.error(err));
@@ -26,7 +27,7 @@ const Detail = () => {
     <div className="overflow-y-auto">
       <Header />
       <div className="flex w-full bg-neutral-200 min-h-[88vh] justify-center items-center">
-        <DetailBoard data={data} comment={comment} />
+        <DetailBoard data={data} comment={comment} setComment={setComment} />
       </div>
       <Footer />
     </div>

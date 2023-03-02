@@ -50,7 +50,7 @@ const InnerBox = () => {
 
   const onClickSendEmailButton = () => {
     axios
-      .post("/signup/evf", { email })
+      .post("/signup/evf", { id: email })
       .then((res) => {
         setCode(res.data.sendEvfcode);
       })

@@ -9,7 +9,7 @@ const BoardTable = ({ data, onClickTitle, count, handlePage }) => {
         <div className="flex w-[10%] h-12 justify-center items-center border-neutral-400 border-r">작성자</div>
         <div className="flex w-[50%] h-12 justify-center items-center border-neutral-400 border-r">제목</div>
         <div className="flex w-[10%] h-12 justify-center items-center border-neutral-400 border-r">카테고리</div>
-        <div className="flex w-[10%] h-12 justify-center items-center border-neutral-400 border-r">좋아요</div>
+        <div className="flex w-[10%] h-12 justify-center items-center border-neutral-400 border-r">조회수</div>
         <div className="flex w-[15%] h-12 justify-center items-center">작성일</div>
       </div>
       {data &&
