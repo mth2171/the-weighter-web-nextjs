@@ -26,11 +26,9 @@ const ModifyTable = () => {
   };
 
   useEffect(() => {
-    console.log(id);
     axios
       .get("show", { withCredentials: true, params: { id } })
       .then((res) => {
-        console.log(res.data.result);
         setCategory(res.data.result.category);
         setTitle(res.data.result.title);
         setContent(res.data.result.content);

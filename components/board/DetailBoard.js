@@ -10,7 +10,6 @@ const DetailBoard = ({ data, comment, setComment }) => {
 
   const onClickWriteComment = () => {
     if (content) {
-      console.log(content, data.id);
       axios
         .post("comment/create", { content, board_id: data.id }, { withCredentials: true })
         .then((res) => setComment(res.data))

@@ -16,7 +16,6 @@ const Detail = () => {
       axios
         .get("/board/show", { withCredentials: true, params: { id } })
         .then((res) => {
-          console.log(res.data);
           setData(res.data.result);
           setComment(res.data.comment);
         })
