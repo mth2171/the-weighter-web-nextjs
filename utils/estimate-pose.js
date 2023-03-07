@@ -2,8 +2,8 @@ import Squat from "./detect-pose/squat";
 import Situp from "./detect-pose/situp";
 
 export function getKeypointsObject(pose) {
-  if (pose[0].keypoints) {
-    return pose[0].keypoints.reduce((acc, { name, score }) => {
+  if (pose.length > 0) {
+    pose[0].keypoints.reduce((acc, { name, score }) => {
       acc.score = score;
       acc[name] = acc;
       return { ...acc };
@@ -24,5 +24,7 @@ export default function EstimatePose(type) {
       return Squat();
     case "situp":
       return Situp();
+    default:
+      return Squat();
   }
 }

@@ -7,7 +7,7 @@ import EstimatePose from "../../utils/estimate-pose";
 import AbsoluteArea from "./absolute-area";
 
 const ExerciseScreen = ({ type, setNowCount, isReady, time }) => {
-  const { count, step, checkPoses } = EstimatePose(type);
+  const [count, step, checkPoses] = EstimatePose(type);
 
   useEffect(() => {
     setNowCount(count);
