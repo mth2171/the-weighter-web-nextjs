@@ -2,15 +2,11 @@ import Squat from "./detect-pose/squat";
 import Situp from "./detect-pose/situp";
 
 export function getKeypointsObject(pose) {
-  if (pose.length > 0) {
-    pose[0].keypoints.reduce((acc, { name, score }) => {
+    return pose[0].keypoints.reduce((acc, { name, score }) => {
       acc.score = score;
       acc[name] = acc;
       return { ...acc };
     });
-  } else {
-    return "";
-  }
 }
 
 export function getAngle(x1, y1, x2, y2) {
