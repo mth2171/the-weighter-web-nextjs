@@ -1,7 +1,8 @@
 import axios from "axios";
 import moment from "moment";
 import { useRouter } from "next/router";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import request from "../../utils/request";
 
 const DetailBoard = ({ data, comment, setComment }) => {
   const router = useRouter();
@@ -10,19 +11,19 @@ const DetailBoard = ({ data, comment, setComment }) => {
 
   const onClickWriteComment = () => {
     if (content) {
-      axios
-        .post("comment/create", { content, board_id: data.id }, { withCredentials: true })
+      request
+        .post("board/comment/create", { content, board_id: data.id })
         .then((res) => setComment(res.data))
         .catch((err) => console.error(err));
     }
   };
 
   const onClickHitButton = () => {
-    axios.post("http://localhost:8000/board/like", { id: data.id, like: data.like }, { withCredentials: true }).then((res) => setNowHit(res.data.like));
+    request.post("board/like", { id: data.id, like: data.like }).then((res) => setNowHit(res.data));
   };
 
   const onClickDeleteButton = () => {
-    axios.post("delete", { id: data.id }, { withCredentials: true }).then((res) => {
+    request.post("board/delete", { id: data.id }).then((res) => {
       if (res.data === "SUCCESS") {
         router.back();
       } else {
@@ -34,6 +35,10 @@ const DetailBoard = ({ data, comment, setComment }) => {
   const onClickModifyButton = () => {
     router.push({ pathname: "/board/modify", query: { id: data.id } });
   };
+
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
 
   return (
     <div className="flex w-3/5 border-neutral-400 border-2 justify-center bg-white items-center flex-col my-10">

@@ -60,7 +60,7 @@ const ExerciseScreen = ({ type, setNowCount, isReady, time }) => {
 
     setInterval(() => {
       detectWebcam(detector);
-    }, 10);
+    }, 10000);
   };
 
   useEffect(() => {

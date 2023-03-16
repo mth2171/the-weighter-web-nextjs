@@ -2,6 +2,7 @@ import axios from "axios";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useState } from "react";
+import request from "../../utils/request";
 
 const CreateTable = () => {
   const router = useRouter();
@@ -11,8 +12,9 @@ const CreateTable = () => {
 
   const onClickSubmitButton = () => {
     if (title && category && content) {
-      axios
-        .post("http://localhost:8000/board/create", { title, category, content }, { withCredentials: true })
+      console.log(localStorage.getItem("token"));
+      request
+        .post("board/create", { title, category, content })
         .then((res) => {
           if (res.data === "SUCCESS") {
             router.push("/board");

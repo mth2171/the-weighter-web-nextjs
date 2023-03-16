@@ -5,7 +5,7 @@ module.exports = {
     extend: {
       colors: {
         menuitem: "#23E0E2",
-        button: "#01919e",
+        button: "#06CFCB",
         hover: "#8EC1C6",
         op: "rgba(0, 0, 0, 0.5)",
       },

@@ -15,12 +15,8 @@ const Index = () => {
 
   useEffect(() => {
     axios
-      .get("/board/index", {
+      .get(`/board/index/${page}/${limit}`, {
         withCredentials: true,
-        params: {
-          page,
-          limit,
-        },
       })
       .then((res) => {
         setData(res.data.result);

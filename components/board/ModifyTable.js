@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import axios from "axios";
 import { useRouter } from "next/router";
+import request from "../../utils/request";
 
 const ModifyTable = () => {
   const router = useRouter();
@@ -12,8 +13,8 @@ const ModifyTable = () => {
 
   const onClickSubmitButton = () => {
     if (title && category && content) {
-      axios
-        .post("http://localhost:8000/board/update", { title, category, content, id }, { withCredentials: true })
+      request
+        .post("http://localhost:8000/board/update", { title, category, content, id })
         .then((res) => {
           if (res.data === "SUCCESS") {
             router.back();
@@ -27,11 +28,11 @@ const ModifyTable = () => {
 
   useEffect(() => {
     axios
-      .get("show", { withCredentials: true, params: { id } })
+      .get(`show/${id}`, { withCredentials: true })
       .then((res) => {
-        setCategory(res.data.result.category);
-        setTitle(res.data.result.title);
-        setContent(res.data.result.content);
+        setCategory(res.data.data.category);
+        setTitle(res.data.data.title);
+        setContent(res.data.data.content);
       })
       .catch((err) => console.error(err));
   }, []);

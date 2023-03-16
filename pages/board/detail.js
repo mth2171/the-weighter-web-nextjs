@@ -1,7 +1,6 @@
 import axios from "axios";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
-import CommonLayout from "../../components/layout/CommonLayout";
 import DetailBoard from "../../components/board/DetailBoard";
 import Header from "../../components/layout/Header";
 import Footer from "../../components/layout/Footer";
@@ -14,9 +13,9 @@ const Detail = () => {
   useEffect(() => {
     if (id) {
       axios
-        .get("/board/show", { withCredentials: true, params: { id } })
+        .get(`/board/show/${id}`, { withCredentials: true })
         .then((res) => {
-          setData(res.data.result);
+          setData(res.data.data);
           setComment(res.data.comment);
         })
         .catch((err) => console.error(err));
