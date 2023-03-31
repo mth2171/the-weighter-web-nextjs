@@ -11,9 +11,10 @@ const Index = () => {
   const onClickSubmitButton = () => {
     axios.post("/api/chat", { prompt: res }).then((res) => {
       console.log(res.data);
-      setData(res.data.response.text.replace(/^\n+/, ""));
+      setData(res.data.response.replace(/^\n+/, ""));
     });
   };
+
   return (
     <CommonLayout>
       <div className="flex w-full justify-center items-center flex-row">
@@ -76,7 +77,9 @@ const Index = () => {
           </div>
         </div>
       </div> */}
-      <div className="flex w-3/5 min-h-[100px] mt-5 border-black border-2 whitespace-pre-line p-3 rounded-lg"><label className="flex w-full h-full">{data && data}</label></div>
+      <div className="flex w-3/5 min-h-[100px] mt-5 border-black border-2 whitespace-pre-line p-3 rounded-lg">
+        <label className="flex w-full h-full">{data && data}</label>
+      </div>
     </CommonLayout>
   );
 };

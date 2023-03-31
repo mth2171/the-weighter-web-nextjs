@@ -36,6 +36,10 @@ const DetailBoard = ({ data, comment, setComment }) => {
     router.push({ pathname: "/board/modify", query: { id: data.id } });
   };
 
+  const onClickDeleteComment = (id) => {
+    request.post("board/comment/delete", { id, board_id: data.id }).then((res) => setComment(res.data));
+  };
+
   useEffect(() => {
     console.log(data);
   }, [data]);
@@ -71,7 +75,16 @@ const DetailBoard = ({ data, comment, setComment }) => {
             return (
               <div className="flex w-full h-14 justify-between border-neutral-400 border-b-2 items-center" key={value.id}>
                 <div className="flex w-[10%] h-14 justify-center items-center border-neutral-400 border-r border-y bg-neutral-300">{value.user_name}</div>
-                <div className="flex w-[90%] h-full px-5 items-center">{value.content}</div>
+                <div className="flex w-[70%] h-full px-5 items-center">{value.content}</div>
+                <div className="flex w-[20%] h-full items-center justify-end pr-1">
+                  <button
+                    className="flex w-16 h-12 bg-red-500 text-white justify-center items-center rounded-l-lg"
+                    onClick={() => onClickDeleteComment(value.id)}
+                  >
+                    삭제
+                  </button>
+                  <button className="flex w-16 h-12 bg-green-500 text-white justify-center items-center rounded-r-lg">수정</button>
+                </div>
               </div>
             );
           })}

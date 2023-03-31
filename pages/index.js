@@ -5,6 +5,7 @@ export default function Home() {
   return (
     <CommonLayout>
       <Banner />
+      <button onClick={() => console.log(localStorage.getItem("token"))}>버튼</button>
     </CommonLayout>
   );
 }

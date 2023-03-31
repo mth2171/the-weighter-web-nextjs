@@ -20,6 +20,7 @@ const Motion = () => {
   const [ready, setReady] = useState(5);
   const [isFinished, setIsFinished] = useState(false);
   const [open, setOpen] = useState(false);
+  const [isFull, setIsFull] = useState(false);
 
   const onClickStartButton = () => {
     setIsReady(true);
@@ -75,7 +76,33 @@ const Motion = () => {
   return (
     <CommonLayout>
       {isReady && <CountScreen ready={ready} />}
-      <InsideBox type={type} setNowCount={setNowCount} nowCount={nowCount} onClickStartButton={onClickStartButton} isReady={isReady} time={time} />
+      {isFull ? (
+        <div className="flex w-full h-full justify-center items-center bg-gray-200">
+          <InsideBox
+            type={type}
+            setNowCount={setNowCount}
+            nowCount={nowCount}
+            onClickStartButton={onClickStartButton}
+            isReady={isReady}
+            time={time}
+            isFull={isFull}
+            setIsFull={setIsFull}
+          />
+        </div>
+      ) : (
+        <div className="flex w-full h-full justify-center items-center flex-row">
+          <InsideBox
+            type={type}
+            setNowCount={setNowCount}
+            nowCount={nowCount}
+            onClickStartButton={onClickStartButton}
+            isReady={isReady}
+            time={time}
+            isFull={isFull}
+            setIsFull={setIsFull}
+          />
+        </div>
+      )}
       <MotionResult
         open={open}
         onClose={() => setOpen(true)}

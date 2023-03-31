@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import title from "../../public/title.png";
 import Dropdown from "./Dropdown";
-import cookies from "next-cookies";
+import NutritionDropdown from "./NutritionDropdown";
 
 const Header = () => {
   const [isLogined, setIsLogined] = useState(false);
@@ -18,9 +18,7 @@ const Header = () => {
         <Link href="/info">
           <button className="flex w-36 h-[4vh] justify-center items-center border-b-2 border-menuitem mr-7 text-base font-semibold">서비스 소개</button>
         </Link>
-        <Link href="/barcode">
-          <button className="flex w-36 h-[4vh] justify-center items-center border-b-2 border-menuitem mr-7 text-base font-semibold">영양소 추가</button>
-        </Link>
+        <NutritionDropdown />
         <Dropdown />
         <Link href="/board">
           <button className="flex w-36 h-[4vh] justify-center items-center border-b-2 border-menuitem mr-7 text-base font-semibold">고객 지원</button>

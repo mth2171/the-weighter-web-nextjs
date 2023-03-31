@@ -12,8 +12,6 @@ export default function Squat() {
   const checkPoses = (pose) => {
     const { right_hip, right_knee, left_hip, left_knee } = getKeypointsObject(pose);
 
-    console.log(right_hip, right_knee, left_hip, left_knee);
-
     const angleKnee = {
       rightHigh: getAngle(right_hip.x, right_hip.y, right_knee.x, right_knee.y),
       leftHigh: getAngle(left_hip.x, left_hip.y, left_knee.x, left_knee.y),

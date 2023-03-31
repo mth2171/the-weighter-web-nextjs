@@ -12,7 +12,6 @@ const CreateTable = () => {
 
   const onClickSubmitButton = () => {
     if (title && category && content) {
-      console.log(localStorage.getItem("token"));
       request
         .post("board/create", { title, category, content })
         .then((res) => {

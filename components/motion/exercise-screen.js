@@ -5,8 +5,9 @@ import Webcam from "react-webcam";
 import { drawKeypoints, drawSkeleton } from "../../utils/draw";
 import EstimatePose from "../../utils/estimate-pose";
 import AbsoluteArea from "./absolute-area";
+import { useState } from "react";
 
-const ExerciseScreen = ({ type, setNowCount, isReady, time }) => {
+const ExerciseScreen = ({ type, setNowCount, isReady, time, isFull, setIsFull }) => {
   const [count, step, checkPoses] = EstimatePose(type);
 
   useEffect(() => {
@@ -15,9 +16,6 @@ const ExerciseScreen = ({ type, setNowCount, isReady, time }) => {
 
   const webcamRef = useRef(null);
   const canvasRef = useRef(null);
-
-  const videoWidth = 640;
-  const videoHeight = 480;
 
   const drawResult = (pose, video, videoWidth, videoHeight, canvas) => {
     if (!canvas.current) {
@@ -43,10 +41,10 @@ const ExerciseScreen = ({ type, setNowCount, isReady, time }) => {
 
       const poses = await detector.estimatePoses(video);
       // const poses = await detector.estimateSinglePose(video);
-
-      checkPoses(poses);
-
-      drawResult(poses, video, videoWidth, videoHeight, canvasRef);
+      if (poses.length > 0) {
+        checkPoses(poses);
+        drawResult(poses, video, videoWidth, videoHeight, canvasRef);
+      }
     }
   };
 
@@ -60,14 +58,20 @@ const ExerciseScreen = ({ type, setNowCount, isReady, time }) => {
 
     setInterval(() => {
       detectWebcam(detector);
-    }, 10000);
+    }, 10);
   };
 
   useEffect(() => {
     runMovenet();
-  });
+  }, []);
 
-  return (
+  return isFull ? (
+    <div>
+      <AbsoluteArea step={step} time={time} setIsFull={setIsFull} />
+      <Webcam ref={webcamRef} className="absolute w-[1920px] h-[960px] top-0 left-0" />
+      <canvas ref={canvasRef} className="absolute w-[1280px] h-full top-0 left-[16.67%] scale-[(-1, 1)] translate-[(-200, 0)]" />
+    </div>
+  ) : (
     <div>
       <AbsoluteArea step={step} time={time} />
       <Webcam ref={webcamRef} className="absolute w-[640px] h-[480px] top-[23%] left-[33%]" />

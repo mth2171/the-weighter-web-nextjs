@@ -21,7 +21,7 @@ const request = axios.create({
   withCredentials: true,
   headers: {
     "Access-Control-Allow-Origin": "*",
-    Authorization: `bearer ${localStorage.getItem("token")}`,
+    Authorization: typeof window !== "undefined" && `bearer ${localStorage.getItem("token")}`,
   },
 });
 
