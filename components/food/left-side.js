@@ -6,11 +6,7 @@ import * as cocoSsd from "@tensorflow-models/coco-ssd";
 import "@tensorflow/tfjs-backend-webgl";
 import MyCanvas from "../layout/MyCanvas";
 
-const LeftSide = () => {
-  const [image, setImage] = useState(null);
-  const [predictions, setPredictions] = useState(null);
-  const canvasRef = useRef(null);
-
+const LeftSide = ({ image, setImage, predictions, setPredictions, canvasRef }) => {
   const onChangeImage = async (file) => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
@@ -102,25 +98,7 @@ const LeftSide = () => {
           정보 등록
         </button>
       </div>
-      <div className="flex flex-row items-center justify-center">
-        {predictions &&
-          predictions.map((value, index) => {
-            const [x, y, width, height] = value.bbox;
-            console.log(index);
-            return (
-              <MyCanvas
-                key={index}
-                x={x}
-                y={y}
-                width={width}
-                height={height}
-                image={canvasRef.current}
-                imageWidth={canvasRef.current.width}
-                imageHeight={canvasRef.current.height}
-              />
-            );
-          })}
-      </div>
+      <div className="flex flex-row items-center justify-center"></div>
     </div>
   );
 };

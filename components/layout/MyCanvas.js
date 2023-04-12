@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useRef, useEffect } from "react";
 
-const MyCanvas = ({ x, y, width, height, image }) => {
+const MyCanvas = ({ x, y, width, height, image, onClick }) => {
   const [canvasRef, setCanvasRef] = useState(useRef(null));
 
   const drawImage = () => {
@@ -23,7 +23,7 @@ const MyCanvas = ({ x, y, width, height, image }) => {
     drawImage();
   }, []);
 
-  return <canvas ref={canvasRef} className="flex" />;
+  return <canvas ref={canvasRef} className="flex mx-1 cursor-pointer" onClick={() => onClick(canvasRef.current)} />;
 };
 
 export default MyCanvas;
