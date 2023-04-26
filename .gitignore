@@ -31,4 +31,4 @@ yarn-error.log*
 # vercel
 .vercel
 
-/public/food_model_2
+public/food_model_2
