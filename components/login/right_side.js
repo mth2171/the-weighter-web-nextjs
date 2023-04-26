@@ -32,7 +32,10 @@ const RightSide = () => {
   const onClickSubmitButton = () => {
     axios
       .post("http://localhost:8000/login/post", { id: email, pw: password }, { withCredentials: true })
-      .then((res) => localStorage.setItem("token", res.data.token))
+      .then((res) => {
+        console.log(res.data);
+        localStorage.setItem("token", res.data.data);
+      })
       .catch((err) => console.error(err));
   };
   return (

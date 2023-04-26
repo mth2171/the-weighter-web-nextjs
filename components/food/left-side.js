@@ -4,20 +4,29 @@ import { useEffect, useRef, useState } from "react";
 import * as tf from "@tensorflow/tfjs";
 import * as cocoSsd from "@tensorflow-models/coco-ssd";
 import "@tensorflow/tfjs-backend-webgl";
-import MyCanvas from "../layout/MyCanvas";
 
-const LeftSide = ({ image, setImage, predictions, setPredictions, canvasRef }) => {
+const LeftSide = ({ image, setImage, predictions, setPredictions, canvasRef, handleOpen }) => {
   const onChangeImage = async (file) => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext("2d");
     const img = new Image();
     img.onload = () => {
       console.log(img.width, img.height);
+      canvas.width = img.width;
+      canvas.height = img.height;
 
-      img.height *= canvas.width / img.width;
-      img.width *= canvas.width / img.width;
+      if (img.width > img.height) {
+        img.width = 450;
+        img.height = (canvas.height * 450) / canvas.width;
+      } else {
+        img.width = (canvas.width * 300) / canvas.height;
+        img.height = 300;
+      }
+
       canvas.height = img.height;
       canvas.width = img.width;
+
+      console.log(canvas.width, canvas.height);
 
       ctx.drawImage(img, 0, 0, img.width, img.height);
     };
@@ -32,7 +41,7 @@ const LeftSide = ({ image, setImage, predictions, setPredictions, canvasRef }) =
       })
       .then((model) => {
         const tensor = tf.browser.fromPixels(img);
-        model.detect(tensor, 20, 0.1).then((prediction) => {
+        model.detect(tensor, 20, 0.05).then((prediction) => {
           setPredictions(prediction.filter((value) => value.class === "bowl"));
         });
       });
@@ -71,7 +80,7 @@ const LeftSide = ({ image, setImage, predictions, setPredictions, canvasRef }) =
     <div className="flex flex-col w-2/5 h-full items-center justify-center">
       {image ? (
         <div className="flex w-full h-1/2 items-center justify-center">
-          <canvas ref={canvasRef} alt="image" className="absolute" width={450} />
+          <canvas ref={canvasRef} alt="image" className="flex" width={450} />
         </div>
       ) : (
         <label className="flex flex-col w-[80%] h-[50%] items-center justify-center bg-neutral-200 rounded-2xl shadow-shadow cursor-pointer">
@@ -83,7 +92,10 @@ const LeftSide = ({ image, setImage, predictions, setPredictions, canvasRef }) =
       <div className="flex flex-row w-[90%] justify-around">
         <button
           className="flex w-36 h-12 items-center justify-center bg-button rounded-lg shadow-shadow mt-7 text-white text-[15px] hover:bg-hover hover:transition"
-          onClick={() => setImage("")}
+          onClick={() => {
+            setImage("");
+            setPredictions("");
+          }}
         >
           초기화
         </button>
@@ -93,12 +105,13 @@ const LeftSide = ({ image, setImage, predictions, setPredictions, canvasRef }) =
         >
           식탁 분석
         </button>
-
-        <button className="flex w-36 h-12 items-center justify-center bg-button rounded-lg shadow-shadow mt-7 text-white text-[15px] hover:bg-hover hover:transition">
+        <button
+          className="flex w-36 h-12 items-center justify-center bg-button rounded-lg shadow-shadow mt-7 text-white text-[15px] hover:bg-hover hover:transition"
+          onClick={handleOpen}
+        >
           정보 등록
         </button>
       </div>
-      <div className="flex flex-row items-center justify-center"></div>
     </div>
   );
 };
