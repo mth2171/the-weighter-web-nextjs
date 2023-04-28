@@ -5,7 +5,6 @@ import RightSide from "../components/food/right-side";
 import Background from "../components/food/background";
 import { Modal, Box } from "@mui/material";
 import { useRef } from "react";
-import axios from "axios";
 import request from "../utils/request";
 import Image from "next/image";
 

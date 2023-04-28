@@ -4,16 +4,17 @@ import { useEffect, useRef, useState } from "react";
 import * as tf from "@tensorflow/tfjs";
 import * as cocoSsd from "@tensorflow-models/coco-ssd";
 import "@tensorflow/tfjs-backend-webgl";
+import Image from "next/image";
 
 const LeftSide = ({ image, setImage, predictions, setPredictions, canvasRef, handleOpen }) => {
   const onChangeImage = async (file) => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    const img = new Image();
+    const img = canvasRef.current;
+    // const ctx = canvas.getContext("2d");
+    // const img = new Image();
     img.onload = () => {
       console.log(img.width, img.height);
-      canvas.width = img.width;
-      canvas.height = img.height;
+      // canvas.width = img.width;
+      // canvas.height = img.height;
 
       if (img.width > img.height) {
         img.width = 450;
@@ -23,12 +24,12 @@ const LeftSide = ({ image, setImage, predictions, setPredictions, canvasRef, han
         img.height = 300;
       }
 
-      canvas.height = img.height;
-      canvas.width = img.width;
+      // canvas.height = img.height;
+      // canvas.width = img.width;
 
-      console.log(canvas.width, canvas.height);
+      // console.log(canvas.width, canvas.height);
 
-      ctx.drawImage(img, 0, 0, img.width, img.height);
+      // ctx.drawImage(img, 0, 0, img.width, img.height);
     };
     img.src = URL.createObjectURL(file);
   };
@@ -51,17 +52,20 @@ const LeftSide = ({ image, setImage, predictions, setPredictions, canvasRef, han
     const img = canvasRef.current;
     const ctx = img.getContext("2d");
 
-    predictions.forEach((prediction) => {
+    const rects = predictions.forEach((prediction) => {
       if (prediction.class === "bowl") {
         const [x, y, width, height] = prediction.bbox;
 
-        ctx.beginPath();
-        ctx.rect(x, y, width, height);
-        ctx.strokeStyle = "#FF00FF";
-        ctx.lineWidth = 2;
-        ctx.stroke();
+        return <rect x={x} y={y} width={width} height={height} className="absolute" />;
+
+        // ctx.beginPath();
+        // ctx.rect(x, y, width, height);
+        // ctx.strokeStyle = "#06CFCB";
+        // ctx.lineWidth = 2;
+        // ctx.stroke();
       }
     });
+    return <svg className="w-full h-full">{rects}</svg>;
   };
 
   useEffect(() => {
@@ -80,6 +84,7 @@ const LeftSide = ({ image, setImage, predictions, setPredictions, canvasRef, han
     <div className="flex flex-col w-2/5 h-full items-center justify-center">
       {image ? (
         <div className="flex w-full h-1/2 items-center justify-center">
+          <Image ref={canvasRef} width={450} height={300} alt="image" />
           <canvas ref={canvasRef} alt="image" className="flex" width={450} />
         </div>
       ) : (
